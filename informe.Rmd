@@ -90,11 +90,145 @@ $$
 
 ### Error Cuadrático Medio
 
-## Estadísticos suficientes
+### Estadísticos suficientes
 - ecm = sesgo y varianza
 - consistencia
 - estadístico suficiente
 
+###Estimador de momentos para p con k conocido
+Sea $X_{1},X_{2},X_{3},...,X_{n}$ una muestra aleatoria con distribuci?n $Bi(p,k)$. Consideremos $g(x)=x$
+
+$$
+\frac{1}{n}\sum_{i=1}^{n}X_{i}=k\,p
+$$
+Por lo tanto, el estimador de momentos de p es:
+$$
+\hat p=\frac{1}{nk}\sum_{i=1}^{n}X_{i}
+$$
+$$
+\hat p_{mo}=\frac{1}{k}\overline{X}
+$$
+
+###Estimador de de m?xima verosimilitud para p con k conocido
+Sea $X_{1},X_{2},X_{3},...,X_{n}$ una muestra aleatoria con distribuci?n $Bi(k,p)$.
+
+$$
+p(x,p)=\binom{x}{p} p^x (1-p)^{k-x}
+$$
+
+La funci?n de probabilidad conjunta es
+$$
+L(x,p)=\prod_{i=1}^{k}\binom{x}{p} p^x (1-p)^{k-x}
+$$
+$$
+L(x,p)=\prod_{i=1}^{k}\binom{x}{p}*[ p^{\sum_{i=1}^{n}X_{i}}(1-p)^{nk-\sum_{i=1}^{n}X_{i}}]
+$$
+$$
+\frac{\partial ln L(x,p)}{\partial p}=\frac{\sum_{i=1}^{n}X_{i}}{p}-\frac{nk-\sum_{i=1}^{n}X_{i}}{1-p}
+$$
+Escrito de otra forma es:
+$$
+\frac{\partial ln L(x,p)}{\partial p}=\frac{k n \overline{X}}{p}-\frac{n(k-\overline{X})}{(1-p)}
+$$
+Igualando a cero
+$$
+\frac{n \overline{X}(1-p)-np(k-\overline{X})}{p(1-p)}=0
+$$
+
+$$
+n [\overline{X}(1-p)-p(k-\overline{X})]=0
+$$
+
+$$
+\overline{X}(1-p)-p(k-\overline{X})=0
+$$
+
+$$
+\overline{X}-\overline{X}p-pk+\overline{X}p=0
+$$
+
+$$
+\overline{X}-pk=0
+$$
+Luego,el estimador de maxima verosimilitud es:
+$$
+\hat p_{mv}=\frac{1}{k}\overline{X}
+$$
+
+### Error cuadr?tico medio
+
+$$
+ECM_{\theta}=E_{\theta}(\delta(X)-q(\theta))^2
+$$
+
+Para determinar la bondad del estimador se comparan los ECM de cada estimador y el que tiene menor ECM es el mejor estimador, es decir:
+
+$$
+ECM_{\theta}(\delta^*)\leq ECM_{\theta}(\delta) \,\, \, \forall \theta \in \Theta
+$$
+
+En nuestro caso no se puede comparar los estimadores porque tanto el de momentos como el de maxima verosimilitud nos di? el mismo estimador. De cualquier manera se puede determinar el  ECM de los mismos.
+
+Para calcular el ECM utilizaremos la siguiente f?rmula 
+
+$$
+ECM_{\theta}=Var_{\theta}(\delta(X))+ sesgo
+$$
+
+### Sesgo
+
+El sesgo de un estimador es
+$$
+Sesgo=\mathbb{E}_{\theta}(\delta(X)-q(\theta))
+$$
+
+Un estimador es insesgado cuando el sesgo es cero, es decir que el $ECM_{\theta}=Var_{\theta}(\delta(X))$
+
+Por definici?n de sesgo,un es estimador es insesgado, si y s?lo si $E_{\theta}(\delta(X))=q(\theta)$
+
+En nuestro caso:
+$$
+\mathbb{E}[\hat p]=\mathbb{E}[\frac{\overline{X}}{n}]
+$$
+$$
+\frac{1}{n}.\mathbb{E}(X_{1})=\frac{1}{n}.n.p= p
+$$
+Por lo tanto el estimador es insesgado
+
+### $Var_{\theta}(\delta(X))$
+
+En nuestro caso:
+
+$$
+V[\hat p]=V[\frac{\overline X}{n}]=\frac{V(\overline X)}{n^2}
+$$
+Primero se determinar? la $V(\overline X)$
+$$
+V(\overline X)=V(\frac{1}{k}\sum_{i=1}^{n}X_{i}]
+$$
+$$
+V(\overline X)=\frac{1}{k^2}. k.V(X_{i})
+$$
+$$
+V(\hat p)=\frac{1}{k.n}.p (1-p)
+$$
+
+Por lo tanto el Error cuadr?tico medio es:$ECM=\frac{1}{k.n}.p (1-p)$
+
+### Estadísticos suficientes
+
+Sea $X$ un vector aleatorio de dimensi?n n cuya distribuci?n es$F(x,\theta) con \theta \in \Theta$
+Se dice que un estad?stico $T=r(X)$ es suficiente para todo $\theta$ si la distribuci?n de $X$ condicional a que $T=t$ es independiente de $\theta$ para todo $t$
+
+Para encontrar el estad?stico suficiente se utilizar? el siguiente teorema
+
+###Teorema de Factorizaci?n
+
+Sea $X$ un vector aleatorio con funci?n de densidad o funci?n de probabilidad puntural $p(x,\theta),\theta \in \Theta$. Entonces, el estad?stico $T=r(X)$ es suficiente para $\theta$si y s?lo si existen dos funciones $g$ y $h$ tales que:
+
+$$
+p(\mathbf{x},\theta)=g(r(\mathbf{x}),\theta) h(\mathbf{x})
+$$
 
 
 
@@ -105,95 +239,8 @@ sims <- 1e2
 max_n <- 1e3
 lambda <- 1
 
-# meta-muestra (S) de muestras (X)
-SX <- rexp(sims * max_n, lambda)
 
-# S contiene las `sims` ( #S=`sims`) muestras de `max_n` elementos
-data <- cross_df(list(
-  muestra_id = seq_len(sims),
-    elem_id = seq_len(max_n))) %>%
-        mutate(valor = SX)
-
-data <- data %>% 
-  group_by(muestra_id) %>%
-    arrange(muestra_id, elem_id) %>%
-      mutate(media_acum = cummean(valor))
-
-data %>%
-#  filter(i < 10) %>%
-  ggplot(mapping = aes(x = elem_id, y = media_acum, group = muestra_id)) +
-    geom_line(alpha = 0.01) +
-      coord_cartesian(xlim = c(75, 100))
-                        
-data %>% filter(media_acum > 3)
-range(filter(data, elem_id == max_n)$media_acum)
-data %>%
-  filter(j = 10) %>%
-    ggplot(aes(x))
-    rnorm(10)
-
-range(v)
-range(exp(v))
-
-n <- 132
-p <- 0.02
-mu <- n * p
-sigma2 <- n * p * (1 - p)
-sims <- 10000
-
-data <- rbinom(sims, n, p)
-(n*p)^2 + n * p * (1 - p)
-mean(data^2)
-
-xraya <- mean(data)
-x2raya <- mean(data^2)
-
-
-tibble(id = seq_len(sims),
-       x = rbinom(sims, n, p),
-              xraya = cummean(x),
-	             x2raya = cummean(x^2),
-		            em1_p = xraya / n,
-			           em2_p = (n + sqrt(n^2 + 4*n*(n-1) * x2raya)) / (2 * n * (n - 1)),
-				          em1_n = xraya / p,
-					         em2_n = (sqrt(p^2 - 2*p + 4*x2raya + 1) + p - 1) / (2 * p)) -> data
-						   
-#View(data)
-
-data %>%
-  filter(id %% 100 == 0) %>%
-    select(id, em1_n, em2_n) %>%
-      gather(-id, key = estimador, value = phat) %>%
-        arrange(id) %>%
-	  ggplot(aes(id, phat, color = estimador)) +
-	    geom_line() +
-	      geom_hline(yintercept = n) +
-	        scale_x_log10() #+ scale_y_log10()
-
-em1_p <- xraya / n
-abs(em1_p - p) / p
-
-em2_p <- (n + sqrt(n^2 + 4*n*(n-1) * x2raya)) / (2 * n * (n - 1))
-
-
-abs(em2_p - p) / p
-
-em1_n <- xraya / p
-
-(em1_n - n) / n 
-
-em2_n <- (sqrt(p^2 - 2*p + 4*x2raya + 1) + p - 1) / (2 * p)
-em2_n
-
-em12_n <- xraya^2 / (xraya^2 + xraya - x2raya)
-em12_p <- (xraya^2 + xraya - x2raya) / xraya
-
-em12_n
-em1_n
-
-combinaciones <- function(n, m) {
-  
-}
+```{r maxima_verosimilitud}
 verosimilitud <- function(X) {
   function(tita) {
       sum(log(dbinom(X, size = tita[["n"]], prob = tita[["p"]])))
@@ -241,9 +288,9 @@ data %>%
     geom_line()
 
 data %>% arrange(desc(y))
+```
 
-
-
+```{r computo_ecm}
 estimadores <- list(
   m1_p = function(X, n, ...) { mean(X) / n },
     m2_p = function(X, n, ...) {
@@ -260,8 +307,10 @@ estimadores <- list(
 				    mv_p = function(X, p, ...) { mean(X) / p }
 				    )
 
-rango_p <- c(0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7, 0.9, 0.97, 0.99, 0.997, 0.999)
-rango_n <- round(exp(seq_len(9)), 0)
+rango_p_final <- c(0, 0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7, 0.9, 0.97, 0.99, 0.997, 0.999, 1)
+rango_p <- c(0, 0.01, 0.1, 0.5, 0.9, 0.99, 1)
+rango_n_final <- round(exp(seq_len(9)), 0)
+rango_n <- round(exp(seq_len(4)), 0)
 rango_k <-rango_n
 sims <- 1000
 
@@ -304,3 +353,5 @@ resultados %>%
     geom_freqpoly() + 
         facet_grid(n ~ p)
 
+
+```
