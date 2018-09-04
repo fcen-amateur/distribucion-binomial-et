@@ -1,0 +1,306 @@
+---
+title: "Teoría Estadística - Distribución Binomial"
+author: "Gonzalo Barrera Borla y Jesús Zapata"
+date: "2 de Septiembre de 2018"
+output:
+  html_document: 
+    df_print: kable
+    number_sections: yes
+    theme: journal
+    toc: yes
+  pdf_document: 
+    latex_engine: xelatex
+header-includes:
+- \usepackage{mathcal}
+---
+
+# Introducción
+
+Sea $\mathbb{X}=(X_1,X_2,...,X_n)$ un vector aleatorio tal que $ X_i \sim Bi(k, p) \ \forall \ i \in \{1,...,n\}$, y $X_i \ \bot \ X_j \ \forall \ i,j \in \{1,...,n\}$. Es decir, que todas las $X_i$ son independientes entre sí, están idénticamente distribuidas, y su función de distribución pertenece a la "familia binomial"
+
+Si escribimos $\theta = (k, p)$ la función de probabilidad puntual queda dada por
+
+$$
+f(x; \theta) = \binom{k}{x} \ p^{x} \ (1-p)^{k-x}
+$$
+La función de densidad conjunta, llamémosla $\textbf{p}(x_1,x_2,...,x_n; \theta)$ será entonces
+
+$$
+\textbf{p}(x_1,x_2,...,x_n; \theta) = \prod_{i=1}^{n}{f(x_i; \theta)} = \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times p^{\sum_{i=1}^{n}{x_i}} \times (1-p)^{nk - \sum_{i=1}^{n}{x_i}}
+$$
+Si convenimos en la notación $\overline{x} = \frac{1}{n}\sum_{i=1}^{n}{x_i} $, podemos reescribir
+
+$$
+\textbf{p}(x_1,x_2,...,x_n; \theta) = \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times p^{n\overline{x}} \times (1-p)^{n(k - \overline{x})}
+$$
+
+# Estimadores
+
+Consideraremos tres tipos de situaciones:
+- estimación del número de pruebas $k$ con probabilidad de éxito $p$ conocida,
+- estimación de $p$ con $k$ conocido, y
+- estimación de $\theta = (k, p)$, sin ningún parámetro conocido.
+
+## De $q(\theta) = k$
+
+Asumiendo que la probabilidad de éxito $p$ de un ensayo individual es conocida, 
+es razonable querer estimar el parámetro desconocido $k$, el número de ensayos
+efectuados, siempre el mismo para cada variable aleatoria $X_i$
+
+Lo intentaremos según el método de los momentos, usando los momentos de primer y segundo orden, y según el método de máxima verosimilitud.
+
+### Momentos con $g(x) = x$
+
+Sea $g$ una función de $\mathbb{R}$ en $\mathbb{R}$, luego el método de los momentos estima $\theta$, por el valor $\hat{\theta} = \delta(\mathbb{X})$ que satisface la ecuación
+
+$$
+\frac{1}{n}{\sum_{i=1}^{n}{g(X_i)}}=E(g(X_1) \ | \ \theta = \hat{\theta})
+$$
+
+Si usamos $g(x)=x$, y escribimos $\theta = (\hat{k}, p)$ y sabiendo que $E(X_i)=k\times p \ \forall \ i \in \{1,...,n\}$, 
+ podemos afirmar que el estimador de $k$ será el $\hat{k}$ que satisfaga
+ 
+$$
+\begin{aligned}
+\frac{1}{n}{\sum_{i=1}^{n}{X_i}}&=E(X_1 \ | \ \theta = (\hat{k},p)) \\
+\overline{X} &= \widehat{k} \times p \\
+\widehat{k_{_m_{1}}} &= \frac{\overline{X}}{p}
+\end{aligned}
+$$
+ 
+### Momentos con $g(x) = x^2$
+
+### MV
+
+## De g(tita) = p
+
+### M1
+
+### M2
+
+### MV
+
+## De g(tita) = (k, p)
+
+### M12
+
+### MV
+
+## Comparación
+
+### Error Cuadrático Medio
+
+## Estadísticos suficientes
+- ecm = sesgo y varianza
+- consistencia
+- estadístico suficiente
+
+
+
+
+library(tidyverse)
+library(pryr)
+
+sims <- 1e2
+max_n <- 1e3
+lambda <- 1
+
+# meta-muestra (S) de muestras (X)
+SX <- rexp(sims * max_n, lambda)
+
+# S contiene las `sims` ( #S=`sims`) muestras de `max_n` elementos
+data <- cross_df(list(
+  muestra_id = seq_len(sims),
+    elem_id = seq_len(max_n))) %>%
+        mutate(valor = SX)
+
+data <- data %>% 
+  group_by(muestra_id) %>%
+    arrange(muestra_id, elem_id) %>%
+      mutate(media_acum = cummean(valor))
+
+data %>%
+#  filter(i < 10) %>%
+  ggplot(mapping = aes(x = elem_id, y = media_acum, group = muestra_id)) +
+    geom_line(alpha = 0.01) +
+      coord_cartesian(xlim = c(75, 100))
+                        
+data %>% filter(media_acum > 3)
+range(filter(data, elem_id == max_n)$media_acum)
+data %>%
+  filter(j = 10) %>%
+    ggplot(aes(x))
+    rnorm(10)
+
+range(v)
+range(exp(v))
+
+n <- 132
+p <- 0.02
+mu <- n * p
+sigma2 <- n * p * (1 - p)
+sims <- 10000
+
+data <- rbinom(sims, n, p)
+(n*p)^2 + n * p * (1 - p)
+mean(data^2)
+
+xraya <- mean(data)
+x2raya <- mean(data^2)
+
+
+tibble(id = seq_len(sims),
+       x = rbinom(sims, n, p),
+              xraya = cummean(x),
+	             x2raya = cummean(x^2),
+		            em1_p = xraya / n,
+			           em2_p = (n + sqrt(n^2 + 4*n*(n-1) * x2raya)) / (2 * n * (n - 1)),
+				          em1_n = xraya / p,
+					         em2_n = (sqrt(p^2 - 2*p + 4*x2raya + 1) + p - 1) / (2 * p)) -> data
+						   
+#View(data)
+
+data %>%
+  filter(id %% 100 == 0) %>%
+    select(id, em1_n, em2_n) %>%
+      gather(-id, key = estimador, value = phat) %>%
+        arrange(id) %>%
+	  ggplot(aes(id, phat, color = estimador)) +
+	    geom_line() +
+	      geom_hline(yintercept = n) +
+	        scale_x_log10() #+ scale_y_log10()
+
+em1_p <- xraya / n
+abs(em1_p - p) / p
+
+em2_p <- (n + sqrt(n^2 + 4*n*(n-1) * x2raya)) / (2 * n * (n - 1))
+
+
+abs(em2_p - p) / p
+
+em1_n <- xraya / p
+
+(em1_n - n) / n 
+
+em2_n <- (sqrt(p^2 - 2*p + 4*x2raya + 1) + p - 1) / (2 * p)
+em2_n
+
+em12_n <- xraya^2 / (xraya^2 + xraya - x2raya)
+em12_p <- (xraya^2 + xraya - x2raya) / xraya
+
+em12_n
+em1_n
+
+combinaciones <- function(n, m) {
+  
+}
+verosimilitud <- function(X) {
+  function(tita) {
+      sum(log(dbinom(X, size = tita[["n"]], prob = tita[["p"]])))
+        }
+	} 
+
+tita <- list(n = 50, p = 0.23)
+muestra <- rbinom(100, size = tita[["n"]], prob = tita[["p"]])
+ver1 <- verosimilitud(muestra)
+espacio <- cross(list(
+  n = 1:100,
+    p = (1:100)/100
+    ))
+
+tibble(titon = espacio,
+       vero = map_dbl(titon, ver1)) %>%
+         transmute(
+	     n = map_dbl(titon, "n"),
+	         p = map_dbl(titon, "p"),
+		     vero) -> resumen
+
+resumen %>% mutate(E = n*p) %>% arrange(desc(vero))
+resumen %>% 
+  filter(near(n*p, 0.6)) %>%
+    arrange(desc(vero))
+
+resumen %>%
+  ggplot(aes(n, p, z = vero)) +
+    geom_contour(binwidth = 0.1)
+
+resumen %>%
+  ggplot(aes(n, p)) +
+    geom_density2d()
+
+espacio_vero
+max_n <- 10000
+map(espacio, ver1)
+ver1(list(n = 50, p = 0.1))
+data <- tibble(
+  x = seq_len(max_n),
+    y = map_dbl(x, ver1)) 
+
+data %>%
+  ggplot(aes(x, y)) +
+    geom_line()
+
+data %>% arrange(desc(y))
+
+
+
+estimadores <- list(
+  m1_p = function(X, n, ...) { mean(X) / n },
+    m2_p = function(X, n, ...) {
+        (n + sqrt(n^2 + 4*n*(n-1) * mean(X^2))
+	     ) / (2 * n * (n - 1))
+	       },
+	         m1_n = function(X, p, ...) { mean(X) / p },
+		   m2_n = function(X, p, ...) {
+		       (sqrt(p^2 - 2*p + 4*mean(X^2) + 1) + p - 1
+		            ) / (2 * p)
+			      },
+			        m12_n = function(X, ...) {mean(X)^2 / (mean(X)^2 + mean(X) - mean(X^2))},
+				  m12_p = function(X, ...) {(mean(X)^2 + mean(X) - mean(X^2)) / mean(X)},
+				    mv_p = function(X, p, ...) { mean(X) / p }
+				    )
+
+rango_p <- c(0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7, 0.9, 0.97, 0.99, 0.997, 0.999)
+rango_n <- round(exp(seq_len(9)), 0)
+rango_k <-rango_n
+sims <- 1000
+
+estimaciones_a_realizar <- cross_df(list(
+  k = rango_k, estimador = names(estimadores))
+  )
+
+df <- cross_df(list(n = rango_n, p = rango_p, sim_id = seq_len(sims))) %>%
+  mutate(
+     data = map2(n, p, ~rbinom(n = max(rango_k), size = .x, prob = .y)))
+
+asistente_estimacion <- function(X, nombre_estimador, k, ...) {
+  estimadores[[nombre_estimador]](X[seq_len(k)], ...)
+  }
+
+resultados <- crossing(df, estimaciones_a_realizar) %>%
+  mutate(valor = pmap_dbl(
+      .l = list(X = data, nombre_estimador = estimador,k = k, n = n, p = p),
+          .f = asistente_estimacion))
+
+pryr::object_size(resultados)       
+
+resultados %>%
+  filter(n == 20, p == 0.001, estimador %in% c("m1_p", "m2_p", "m12_p")) %>%
+    ggplot(aes(valor, color = estimador)) +
+      geom_freqpoly()
+
+resultados %>% 
+  select(-data) %>% 
+    write_csv("resultados.csv")
+
+resultados %>%
+  group_by(n, p, k, estimador) %>%
+    summarise(media = mean(valor)) %>%
+                #varianza = sd(valor)) %>%
+		  spread(estimador, media) %>%
+		    View()
+
+  ggplot(aes(valor, color = k)) +
+    geom_freqpoly() + 
+        facet_grid(n ~ p)
+
