@@ -3,13 +3,13 @@ title: "Teoría Estadística - Distribución Binomial"
 author: "Gonzalo Barrera Borla y Jesús Zapata"
 date: "2 de Septiembre de 2018"
 output:
+  pdf_document: 
+    latex_engine: xelatex
   html_document: 
     df_print: kable
     number_sections: yes
     theme: journal
     toc: yes
-  pdf_document: 
-    latex_engine: xelatex
 header-includes:
 - \usepackage{mathcal}
 ---
@@ -54,24 +54,88 @@ Lo intentaremos según el método de los momentos, usando los momentos de primer
 Sea $g$ una función de $\mathbb{R}$ en $\mathbb{R}$, luego el método de los momentos estima $\theta$, por el valor $\hat{\theta} = \delta(\mathbb{X})$ que satisface la ecuación
 
 $$
-\frac{1}{n}{\sum_{i=1}^{n}{g(X_i)}}=E(g(X_1) \ | \ \theta = \hat{\theta})
+\frac{1}{n}{\sum_{i=1}^{n}{g(X_i)}}=\mathbb{E}(g(X_1) \ | \ \theta = \hat{\theta}) = \mathbb{E}_\hat{\theta}}(g(X_1))
 $$
 
 Si usamos $g(x)=x$, y escribimos $\theta = (\hat{k}, p)$ y sabiendo que $E(X_i)=k\times p \ \forall \ i \in \{1,...,n\}$, 
  podemos afirmar que el estimador de $k$ será el $\hat{k}$ que satisfaga
- 
+
 $$
 \begin{aligned}
-\frac{1}{n}{\sum_{i=1}^{n}{X_i}}&=E(X_1 \ | \ \theta = (\hat{k},p)) \\
-\overline{X} &= \widehat{k} \times p \\
-\widehat{k_{_m_{1}}} &= \frac{\overline{X}}{p}
+\frac{1}{n}{\sum_{i=1}^{n}{X_i}}&=\mathbb{E}(X_1 \ | \ \theta = (\hat{k}_{m_1},p)) \\
+\overline{X} &= \hat{k}_{m_{1}} \times p \\
+\hat{k}_{m_1} &= \frac{\overline{X}}{p}
 \end{aligned}
 $$
+
  
 ### Momentos con $g(x) = x^2$
 
-### MV
+Si en lugar de usar la función identidad para $g$ utilizamos $g(x) = x^2$ obtenemos un estimador relacionado al momento $\hat{k}_{m_2}$ de segundo orden. Aquí será útil recordar que para toda variable aleatoria X con media y varianza finitas, $Var(X) = E(X^2) - [E(X)]^2$:
 
+$$
+\begin{aligned}
+\frac{1}{n}{\sum_{i=1}^{n}{X_{i}^{2}}}&=E(X_1^2 \ | \ \theta = (\hat{k}_{m_1},p)) = E_{\hat{k}_{m_1}}(X_1^2) \\
+\overline{X^2} &=Var_{\hat{k}_{m_1}}(X_1) + [E_{\hat{k}_{m_1}}(X_1)]^2 \\
+\overline{X^2} &=\hat{k}_{m_1} \ p \ (1-p) + [\hat{k}_{m_1} \ p]^2 \\
+0 &= \hat{k}_{m_1}^{2} \ p^2  + \hat{k}_{m_1} \ p  (1- p) - \overline{X^2} \end{aligned}
+$$
+Que es una ecuación cuadrática con coeficientes $a=p^2, \ b=p(1-p), \ c = -\overline{X^2}$. La expresión general de sus raíces nos da
+
+$$
+\hat{k}_{m_1}^{2} = \frac{p(p-1) \pm \sqrt{p^2(1-p)^2 + 4  p^2  \overline{X^2}}}{2p^2}
+$$
+Que tomando factor común $p$ en en el numerador y denominador se simplifica a 
+$$
+
+\hat{k}_{m_1}^{2} = \frac{p-1 + \sqrt{(1-p)^2 + 4 \overline{X^2}}}{2p}
+$$
+### Máxima Verosimilitud
+
+Recordemos que el estimador de máxima verosimilitud se define como aquél que maximiza la función de probabilidad conjunta $p$ ("función de verosimilitud") de la muestra observada. En otras palabras, diremos que $\delta(\mathbb{X})=\widehat{g(\theta)_{mv}}=\hat{k}_{mv}$ es el estimador de máxima verosimilitud de $g(\theta)=k$ si se cumple que 
+
+$$
+\textbf{p}(\mathbb{X} \ | \ \theta=(\hat{k}_{mv}, p)) = \max_{\theta \\ \in \Theta} \textbf{p}(\mathbb{X} \ | \ \theta)
+$$
+Al comienzo del trabajo mencionamos que para la familia de distribuciones binomiales, la probabilidad conjunta de la muestra se puede escribir como
+$$
+\begin{aligned}
+\textbf{p}(\mathbb{X} \ | \ \theta) &= \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times p^{n\overline{x}} \times (1-p)^{n(k - \overline{x})} \\
+&= \left( \frac{p}{1-p} \right)^{n\overline{x}} \times  \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk} \\
+&\propto \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk}
+
+\end{aligned}
+$$
+Maximizar esta última expresión sobre $k$ es equivalente a maximizar $\textbf{p}(\mathbb{X})$, ya que asumimos que $p$ es conocido. Llamemos a esta última expresión $L(k \ | \ \mathbb{X}, \theta)$, y veamos en qué valor se maximiza. Como la función es discreta, podemos definir el operador diferencia de la función $f$ en el parámetro $x$
+
+$$
+\Delta(f,x) = f(x+1, ...) - f(x, ...)
+$$
+Y estudiar la desigualdad $\Delta(L,k)>0$, es decir, sobre qué intervalo(s) de $k$ es $L$ creciente. Aquí será útil recordar que 
+
+$$
+\binom{m+1}{n} = \binom{m}{n} \times \frac{m+1}{m+1-n}
+$$
+
+Procedamos:
+
+$$
+\begin{aligned}
+ \Delta(L, k) &= L(k+1) - L(k) \\
+ &= \left[\prod_{i=1}^{n}{\binom{k+1}{x_i}}\right] \times (1-p)^{n(k+1)} - \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk} \\
+ &= \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}}\right]\times (1-p)^{nk} \times (1-p)^{n} - \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk} \\
+ &=\left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk}\times \left[ (1-p)^{n} \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}} \right]- 1 \right]
+
+\end{aligned}
+$$
+Como $(1-p)^{nk} \times \prod_{i=1}^{n}{\binom{k}{x_i}}$ es positivo cuando $k > 0; \ n > 0; \ 0<p<1$, $\Delta(L, k)$ será positiva mientras $(1-p)^{n} \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}} \right] > 1$:
+
+$$
+(1-p)^{n} \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}} \right] > 1 \\
+(1-p)^{n} \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}} \right] > 1 \\
+n \times \ln(1-p)  + \sum_{i=1}^{n} \ln(k + 1) - \sum_{i=1}^{n} \ln(k + 1 - x_i) > 0
+$$
+Esta expresión no es propicia a mayores
 ## De g(tita) = p
 
 ### M1
@@ -240,7 +304,8 @@ max_n <- 1e3
 lambda <- 1
 
 
-```{r maxima_verosimilitud}
+```{r maxima_verosimilitud, eval=FALSE}
+library(tidiverse)
 verosimilitud <- function(X) {
   function(tita) {
       sum(log(dbinom(X, size = tita[["n"]], prob = tita[["p"]])))
@@ -290,7 +355,7 @@ data %>%
 data %>% arrange(desc(y))
 ```
 
-```{r computo_ecm}
+```{r computo_ecm, eval=FALSE}
 estimadores <- list(
   m1_p = function(X, n, ...) { mean(X) / n },
     m2_p = function(X, n, ...) {
