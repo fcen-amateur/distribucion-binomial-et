@@ -3,12 +3,12 @@ title: "Teoría Estadística - Distribución Binomial"
 author: "Gonzalo Barrera Borla y Jesús Zapata"
 date: "2 de Septiembre de 2018"
 output:
-  pdf_document:
-    latex_engine: xelatex
   html_document:
     df_print: kable
     number_sections: yes
     toc: yes
+  pdf_document:
+    latex_engine: xelatex
 ---
 
 # Introducción
@@ -25,10 +25,10 @@ La función de densidad conjunta, llamémosla $\textbf{p}(x_1,x_2,...,x_n; \thet
 $$
 \textbf{p}(x_1,x_2,...,x_n; \theta) = \prod_{i=1}^{n}{f(x_i; \theta)} = \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times p^{\sum_{i=1}^{n}{x_i}} \times (1-p)^{nk - \sum_{i=1}^{n}{x_i}}
 $$
-Si convenimos en la notación $\overline{x} = \frac{1}{n}\sum_{i=1}^{n}{x_i}$, podemos reescribir
+Si convenimos en la notación $\textbf{x}=(x_1, x_2, ..., x_n)$ y $\overline{x} = \frac{1}{n}\sum_{i=1}^{n}{x_i}$, podemos reescribir
 
 $$
-\textbf{p}(x_1,x_2,...,x_n; \theta) = \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times p^{n\overline{x}} \times (1-p)^{n(k - \overline{x})}
+\textbf{p}(\textbf{x}; \theta) = \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times p^{n\overline{x}} \times (1-p)^{n(k - \overline{x})}
 $$
 
 # Estimadores
@@ -59,9 +59,9 @@ Si usamos $g(x)=x$, y escribimos $\theta = (\hat{k}, p)$ y sabiendo que $E(X_i)=
 
 $$
 \begin{aligned}
-\frac{1}{n}{\sum_{i=1}^{n}{X_i}}&=\mathbb{E}(X_1 \ | \ \theta = (\hat{k}_{m_1},p)) \\
-\overline{X} &= \hat{k}_{m_{1}} \times p \\
-\hat{k}_{m_1} &= \frac{\overline{X}}{p}
+\frac{1}{n}{\sum_{i=1}^{n}{X_i}} = \mathbb{E}(X_1 \ | \ \theta = (\hat{k}_{m_1},p)) \Rightarrow
+\overline{X} = \hat{k}_{m_{1}} \times p \Rightarrow
+\boxed{\hat{k}_{m_1} = \frac{\overline{X}}{p}}
 \end{aligned}
 $$
 
@@ -72,220 +72,203 @@ Si en lugar de usar la función identidad para $g$ utilizamos $g(x) = x^2$ obten
 
 $$
 \begin{aligned}
-\frac{1}{n}{\sum_{i=1}^{n}{X_{i}^{2}}}&=E(X_1^2 \ | \ \theta = (\hat{k}_{m_1},p)) = E_{\hat{k}_{m_1}}(X_1^2) \\
-\overline{X^2} &=Var_{\hat{k}_{m_1}}(X_1) + [E_{\hat{k}_{m_1}}(X_1)]^2 \\
-\overline{X^2} &=\hat{k}_{m_1} \ p \ (1-p) + [\hat{k}_{m_1} \ p]^2 \\
-0 &= \hat{k}_{m_1}^{2} \ p^2  + \hat{k}_{m_1} \ p  (1- p) - \overline{X^2} 
+\frac{1}{n}{\sum_{i=1}^{n}{X_{i}^{2}}}&=E(X_1^2 \ | \ \theta = (\hat{k}_{m_2},p)) = E_{\hat{k}_{m_2}}(X_1^2) \\
+\overline{X^2} &=Var_{\hat{k}_{m_2}}(X_1) + [E_{\hat{k}_{m_2}}(X_1)]^2 \\
+\overline{X^2} &=\hat{k}_{m_2} \ p \ (1-p) + [\hat{k}_{m_2} \ p]^2 \\
+0 &= \hat{k}_{m_2}^{2} \ p^2  + \hat{k}_{m_2} \ p  (1- p) - \overline{X^2} 
 \end{aligned}
 $$
 Que es una ecuación cuadrática con coeficientes $a=p^2, \ b=p(1-p), \ c = -\overline{X^2}$. La expresión general de sus raíces nos da
 
 $$
-\hat{k}_{m_1}^{2} = \frac{p(p-1) \pm \sqrt{p^2(1-p)^2 + 4  p^2  \overline{X^2}}}{2p^2}
+\hat{k}_{m_2} = \frac{p(p-1) \pm \sqrt{p^2(1-p)^2 + 4  p^2  \overline{X^2}}}{2p^2}
+=\boxed{\frac{p-1 + \sqrt{(1-p)^2 + 4 \overline{X^2}}}{2p}}
 $$
-Que tomando factor común $p$ en en el numerador y denominador se simplifica a 
-$$
-\hat{k}_{m_1}^{2} = \frac{p-1 + \sqrt{(1-p)^2 + 4 \overline{X^2}}}{2p}
-$$
+La conversión de $\pm$ en $+$ se justifica ya que $k$ debe ser positivo, y $p-1<0$.
+
 ### Máxima Verosimilitud
 
 Recordemos que el estimador de máxima verosimilitud se define como aquél que maximiza la función de probabilidad conjunta $p$ ("función de verosimilitud") de la muestra observada. En otras palabras, diremos que $\delta(\mathbb{X})=\widehat{g(\theta)_{mv}}=\hat{k}_{mv}$ es el estimador de máxima verosimilitud de $g(\theta)=k$ si se cumple que 
 
 $$
-\textbf{p}(\mathbb{X} \ | \ \theta=(\hat{k}_{mv}, p)) = \max_{\theta \ \in \Theta} \textbf{p}(\mathbb{X} \ | \ \theta)
+\textbf{p}(\textbf{x} \ | \ \theta=(\hat{k}_{mv}, p)) = \max_{\theta \ \in \Theta} \textbf{p}(\textbf{x} \ | \ \theta)
 $$
+La forma tradicional de maximizar una expresión así, consiste en buscar $\hat{k} : \frac{\partial \textbf{p}(\textbf{x},\hat{k},p)}{\partial k} = 0$. El problema, es que $\textbf{p}$ incluye términos combinatorios de la forma $\binom{k}{x_i}$, con lo cual su derivada parcial respecto a $k$ no es amistosa.
 
-Al comienzo del trabajo mencionamos que para la familia de distribuciones binomiales, la probabilidad conjunta de la muestra se puede escribir como
-
-$$
-\begin{aligned}
-\textbf{p}(\mathbb{X} \ | \ \theta) &= \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times p^{n\overline{x}} \times (1-p)^{n(k - \overline{x})} \\
-&= \left( \frac{p}{1-p} \right)^{n\overline{x}} \times  \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk} \\
-&\propto \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk}
-\end{aligned}
-$$
-
-Maximizar esta última expresión sobre $k$ es equivalente a maximizar $\textbf{p}(\mathbb{X})$, ya que asumimos que $p$ es conocido. Llamemos a esta última expresión $L(k \ | \ \mathbb{X}, \theta)$, y veamos en qué valor se maximiza. Como la función es discreta, podemos definir el operador diferencia de la función $f$ en el parámetro $x$
+No es lo mismo afirmar que "el EMV no existe", a decir que "el EMV existe pero es difícil de tratar algebraicamente", que es una afirmación más precisa. Haciendo uso del lenguaje $\textbf{R}$, podemos escribir una función equivalente a lo siguiente:
 
 $$
-\Delta(f,x) = f(x+1, ...) - f(x, ...)
-$$
-Y estudiar la desigualdad $\Delta(L,k)>0$, es decir, sobre qué intervalo(s) de $k$ es $L$ creciente. Aquí será útil recordar que 
-
-$$
-\binom{m+1}{n} = \binom{m}{n} \times \frac{m+1}{m+1-n}
+EMV(k) =  \boxed{\hat{k}_{mv} = \underset{k \in \mathbb{N}_{\ge1}}{\mathrm{argmax}} \ \textbf{p}(\mathbb{X} \ | \ \theta)}
 $$
 
-Procedamos:
+## De $q(\theta) = p$
+
+### Momentos con $g(x) = x$
 
 $$
 \begin{aligned}
- \Delta(L, k) &= L(k+1) - L(k) \\
- &= \left[\prod_{i=1}^{n}{\binom{k+1}{x_i}}\right] \times (1-p)^{n(k+1)} - \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk} \\
- &= \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}}\right]\times (1-p)^{nk} \times (1-p)^{n} - \left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk} \\
- &=\left[\prod_{i=1}^{n}{\binom{k}{x_i}}\right] \times (1-p)^{nk}\times \left[ (1-p)^{n} \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}} \right]- 1 \right]
+\frac{1}{n}{\sum_{i=1}^{n}{X_i}} = \mathbb{E}(X_1 \ | \ \theta = (k, \hat{p}_{m_1})) \Rightarrow
+\overline{X} = k \times \hat{p}_{m_1} \Rightarrow
+\boxed{\hat{p}_{m_1} = \frac{\overline{X}}{k}}
+\end{aligned}
+$$
+### Momentos con $g(x) = x^2$
+
+Seguiremos un procedimiento muy similar al utilizado para calcular $\hat{k}_{m_2}$, buscando$\hat{p}_{m_2}$ que satisfaga:
+
+$$
+\begin{aligned}
+\frac{1}{n}{\sum_{i=1}^{n}{X_{i}^{2}}}&=E(X_1^2 \ | \ \theta = (k, \hat{p}_{m_2})) = E_{\hat{p}_{m_2}}(X_1^2) \\
+\overline{X^2} &=Var_{\hat{p}_{m_2}}(X_1) + [E_{\hat{p}_{m_2}}(X_1)]^2 \\
+\overline{X^2} &=k \ \hat{p}_{m_2} \ (1-\hat{p}_{m_2}) + [k \ \hat{p}_{m_2}]^2 \\
+0 &= k(k-1) \ \hat{p}_{m_2}^2  + k \ \hat{p}_{m_2}  - \overline{X^2} 
+\end{aligned}
+$$
+Tomando coeficientes $a=k(k-1), \ b=k, \ c = -\overline{X^2}$, la expresión general de sus raíces nos da
+
+$$
+\boxed{\hat{p}_{m_2} = \frac{- \ k \ + \ \sqrt{k^2 \ + 4 k (k-1) \overline{X^2}}}{2k(k-1)} }
+$$
+
+Al igual que en la estimación de $\hat{k}_{m_2}$, reemplazar $\pm$ por $+$ se justifica ya que $p \in [0,1]$. También vale notar que este estimador sólo sirve si $k>1$.
+
+### Máxima Verosimilitud
+A diferencia de $\hat{k}_{mv}$, $\hat{p}_{mv}$ es más ameno a la manipulación simbólica. 
+
+Como la función $\ln(\mu)$ es monótona creciente, maximizar $\textbf{p}(\textbf{x}, \theta)$ será equivalente a maximizar $\ln \textbf{p}(\textbf{x}, \theta)$. Luego el $EMV(p)$ debe verificar $\frac{\partial \ln \textbf{p}(\textbf{x},k, \hat{p})}{\partial p} = 0$. Calculemos la derivada parcial de $\ln \textbf{p}$:
+
+$$
+\begin{aligned}
+\frac{\partial \ln \textbf{p}(\textbf{x},\theta)}{\partial p} &=  \frac{\partial}{\partial p} \ln \left[ \left(\prod_{i=1}^{n}{\binom{k}{x_i}}\right) \times p^{n\overline{x}} \times (1-p)^{n(k - \overline{x})} \right]
+\\
+&=  \frac{\partial}{\partial p} \left[ \left(\sum_{i=1}^{n}{\ln\binom{k}{x_i}}\right) + n \ \overline{x}  \ln{p} + n \ (k - \overline{x}) \ln{(1-p)} \right]
+\\
+&= \frac{n\overline{x}}{p} - \frac{n(k-\overline{x})}{1-p} = \frac{n \overline{x}(1-p)-np(k-\overline{x})}{p(1-p)}
 \end{aligned}
 $$
 
-Como $(1-p)^{nk} \times \prod_{i=1}^{n}{\binom{k}{x_i}}$ es positivo cuando $k > 0; \ n > 0; \ 0<p<1$, $\Delta(L, k)$ será positiva mientras $(1-p)^{n} \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}} \right] > 1$:
-
+Igualando a cero y reemplazando $p = \hat{p}_{mv}, \ \textbf{x} = \mathbb{X}$
 $$
-(1-p)^{n} \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}} \right] > 1 \\
-(1-p)^{n} \times \left[\prod_{i=1}^{n}{\frac{k + 1}{k + 1 - x_i}} \right] > 1 \\
-n \times \ln(1-p)  + \sum_{i=1}^{n} \ln(k + 1) - \sum_{i=1}^{n} \ln(k + 1 - x_i) > 0
-$$
-Esta expresión no es propicia a mayores
-## De g(tita) = p
-
-### M1
-
-### M2
-
-### MV
-
-## De g(tita) = (k, p)
-
-### M12
-
-### MV
-
-## Comparación
-
-### Error Cuadrático Medio
-
-### Estadísticos suficientes
-- ecm = sesgo y varianza
-- consistencia
-- estadístico suficiente
-
-###Estimador de momentos para p con k conocido
-Sea $X_{1},X_{2},X_{3},...,X_{n}$ una muestra aleatoria con distribuci?n $Bi(p,k)$. Consideremos $g(x)=x$
-
-$$
-\frac{1}{n}\sum_{i=1}^{n}X_{i}=k\,p
-$$
-Por lo tanto, el estimador de momentos de p es:
-$$
-\hat p=\frac{1}{nk}\sum_{i=1}^{n}X_{i}
-$$
-$$
-\hat p_{mo}=\frac{1}{k}\overline{X}
+\begin{aligned}
+0 &= \frac{\partial \ln \textbf{p}(\mathbb{X},(k, \hat{p}_{mv}))}{\partial p} = \frac{n \overline{X}(1-\hat{p}_{mv})-n\hat{p}_{mv}(k-\overline{X})}{\hat{p}_{mv}(1-\hat{p}_{mv})}
+\\[5pt]
+0 &= \frac{n}{\hat{p}_{mv}(1-\hat{p}_{mv})} \times  \overline{X}(1-\hat{p}_{mv})-\hat{p}_{mv}(k-\overline{X})
+\\[5pt]
+0 &= 
+\overline{X}-\overline{X}\hat{p}_{mv}-\hat{p}_{mv} \ k+\overline{X}\hat{p}_{mv} 
+\\[5pt]
+&\Rightarrow \boxed{\hat{p}_{mv}= \frac{1}{k}{\overline{X}}}
+\end{aligned}
 $$
 
-###Estimador de de m?xima verosimilitud para p con k conocido
-Sea $X_{1},X_{2},X_{3},...,X_{n}$ una muestra aleatoria con distribuci?n $Bi(k,p)$.
+Que coincide con el estimador de momentos de primer orden, $\hat{p}_{m_1}=\hat{p}_{mv}$
+
+## De $q(\theta) = \theta = (k, p)$
+
+Intentaremos ahora estimar ambos parámetros de la distribución a la vez
+
+### Método de los momentos
+
+Indicaremos por $\hat{\theta}_{m_{12}} = (\hat{k}_{m_{12}}, \hat{p}_{m_{12}})$ el estimador de momentos para ambos parámetros, que tendrá que cumplir:
 
 $$
-p(x,p)=\binom{x}{p} p^x (1-p)^{k-x}
+\begin{aligned}
+\frac{1}{n} \ \sum_{i=1}^{n}{X_i} &= \overline{X} = E_{\hat{\theta}_{m_{12}}}(X_1) = \hat{k}_{m_{12}} \times \hat{p}_{m_{12}}
+\\
+\frac{1}{n} \ \sum_{i=1}^{n}{X_i^{2}}  &= \overline{X^2} = E_{\hat{\theta}_{m_{12}}}(X_{1}^{2}) = Var_{\hat{\theta}_{m_{12}}}(X_1) + [E_{\hat{\theta}_{m_{12}}}(X_1)]^2 = \hat{k}_{m_{12}} \ \hat{p}_{m_{12}} \ (1-\hat{p}_{m_{12}}) + [\hat{k}_{m_{12}} \ \hat{p}_{m_{12}}]^2
+\end{aligned}
 $$
 
-La funci?n de probabilidad conjunta es
-$$
-L(x,p)=\prod_{i=1}^{k}\binom{x}{p} p^x (1-p)^{k-x}
-$$
-$$
-L(x,p)=\prod_{i=1}^{k}\binom{x}{p}*[ p^{\sum_{i=1}^{n}X_{i}}(1-p)^{nk-\sum_{i=1}^{n}X_{i}}]
-$$
-$$
-\frac{\partial ln L(x,p)}{\partial p}=\frac{\sum_{i=1}^{n}X_{i}}{p}-\frac{nk-\sum_{i=1}^{n}X_{i}}{1-p}
-$$
-Escrito de otra forma es:
-$$
-\frac{\partial ln L(x,p)}{\partial p}=\frac{k n \overline{X}}{p}-\frac{n(k-\overline{X})}{(1-p)}
-$$
-Igualando a cero
-$$
-\frac{n \overline{X}(1-p)-np(k-\overline{X})}{p(1-p)}=0
-$$
+Cuya solución es
 
 $$
-n [\overline{X}(1-p)-p(k-\overline{X})]=0
-$$
+\boxed{ \quad
+\hat{k}_{m_{12}} = \frac{\overline{X}^2 + \overline{X} - \overline{X^2}}{\overline{X}} \quad ; \quad
+\hat{p}_{m_{12}} = \frac{\overline{X}^2}{\overline{X}^2 + \overline{X} - \overline{X^2}} \quad
+}
+
 
 $$
-\overline{X}(1-p)-p(k-\overline{X})=0
-$$
+
+### Máxima Verosimilitud
+
+Al igual que con $\hat{k}_{mv}$, no hay una "expresión cerrada" de $\hat{\theta}_{mv}$ que podamos reportar. Sin embargo, podemos definirlo (y computarlo en $\textbf{R}$) según:
 
 $$
-\overline{X}-\overline{X}p-pk+\overline{X}p=0
+EMV(\theta) =  \boxed{\hat{\theta}_{mv} = \underset{\theta \in \Theta}{\mathrm{argmax}} \ \textbf{p}(\mathbb{X} \ | \ \theta)} \quad , \ \Theta = \{1, 2, ...\} \times [0,1]
 $$
 
+# Comparación y análisis
+
+## Error cuadrático medio
+
+Recordemos que dado el estimador $\widehat{q(\theta)} = \delta(\mathbb{X})$, su error cuadrático medio es
 $$
-\overline{X}-pk=0
-$$
-Luego,el estimador de maxima verosimilitud es:
-$$
-\hat p_{mv}=\frac{1}{k}\overline{X}
+ECM_{\theta}(\delta(\mathbb{X}))=E_{\theta}(\delta(\mathbb{X})-q(\theta))^2 = Var_{\theta}(\delta(\mathbb{X})) + Sesgo^2
+\\
+con \quad Sesgo = b(\delta(\mathbb{X})) = E(\delta(\mathbb{X})) - q(\theta)
 $$
 
-### Error cuadr?tico medio
+Para determinar la bondad del estimador se comparan los ECM de cada estimador y el que tiene menor ECM es el mejor estimador, es decir, $\delta^*$ será mejor estimador que $\delta$ sí y sólo si:
 
 $$
-ECM_{\theta}=E_{\theta}(\delta(X)-q(\theta))^2
+ECM_{\theta}(\delta^*)\leq ECM_{\theta}(\delta) \quad \forall \theta \in \Theta
 $$
 
-Para determinar la bondad del estimador se comparan los ECM de cada estimador y el que tiene menor ECM es el mejor estimador, es decir:
+De todos los estimadores que consideramos hasta ahora, los únicos que permiten calcular sencillamente la esperanza y varianza son $\{\hat{p}_{m_1}, \hat{p}_{mv}, \ \hat{k}_{m_1} \}$. Además, no se puede comparar los estimadores de $p$ porque el de momentos como el de maxima verosimilitud son idénticos. De cualquier manera se puede determinar el  ECM de los mismos.
 
-$$
-ECM_{\theta}(\delta^*)\leq ECM_{\theta}(\delta) \,\, \, \forall \theta \in \Theta
-$$
+### Estimadores de $q(\theta) = p$
 
-En nuestro caso no se puede comparar los estimadores porque tanto el de momentos como el de maxima verosimilitud nos di? el mismo estimador. De cualquier manera se puede determinar el  ECM de los mismos.
-
-Para calcular el ECM utilizaremos la siguiente f?rmula 
-
-$$
-ECM_{\theta}=Var_{\theta}(\delta(X))+ sesgo
-$$
-
-### Sesgo
-
-El sesgo de un estimador es
-$$
-Sesgo=\mathbb{E}_{\theta}(\delta(X)-q(\theta))
-$$
-
-Un estimador es insesgado cuando el sesgo es cero, es decir que el $ECM_{\theta}=Var_{\theta}(\delta(X))$
-
-Por definici?n de sesgo,un es estimador es insesgado, si y s?lo si $E_{\theta}(\delta(X))=q(\theta)$
+Calcularemos primero el sesgo del estimador $\delta = \hat{p}_{m_1} = \hat{p}_{mv}$:
 
 En nuestro caso:
 $$
-\mathbb{E}[\hat p]=\mathbb{E}[\frac{\overline{X}}{n}]
+b(\delta, q)=E_{\theta}\left(\delta(\mathbb{X})-q(\theta)\right) = E_{\theta}\left[\frac{1}{k}\left(\frac{1}{n}\times\sum_{i=1}^{n}{X_i}\right)-p \right] = \frac{1}{kn}n \ E(X_1) - p= \frac{kp}{k} - p = 0
 $$
-$$
-\frac{1}{n}.\mathbb{E}(X_{1})=\frac{1}{n}.n.p= p
-$$
-Por lo tanto el estimador es insesgado
-
-### $Var_{\theta}(\delta(X))$
-
-En nuestro caso:
+Por lo tanto el estimador es insesgado, y su ECM es igual a la varianza del estimador. En este caso,
 
 $$
-V[\hat p]=V[\frac{\overline X}{n}]=\frac{V(\overline X)}{n^2}
-$$
-Primero se determinar? la $V(\overline X)$
-$$
-V(\overline X)=V(\frac{1}{k}\sum_{i=1}^{n}X_{i}]
-$$
-$$
-V(\overline X)=\frac{1}{k^2}. k.V(X_{i})
-$$
-$$
-V(\hat p)=\frac{1}{k.n}.p (1-p)
+Var_{\theta}(\delta)=Var_{\theta}\left[\frac{1}{k} \times \frac{1}{n}\sum_{i=1}^{n}{X_i}\right]=
+\frac{1}{(kn)^2}Var_{\theta}\left[\sum_{i=1}^{n}{X_i}\right] = 
+\frac{1}{(kn)^2}\sum_{i=1}^{n}{Var_{\theta}(X_i)} = \frac{1}{(kn)^2}n \ k \ p\ (1-p)
 $$
 
-Por lo tanto el Error cuadr?tico medio es:$ECM=\frac{1}{k.n}.p (1-p)$
+$$
+\boxed{ECM_{\theta}(\delta)=Var_{\theta}(\delta)=\frac{p(1-p)}{kn}}
+$$
 
-### Estadísticos suficientes
+### Estimadores de $q(\theta) = k$
 
-Sea $X$ un vector aleatorio de dimensi?n n cuya distribuci?n es$F(x,\theta) con \theta \in \Theta$
-Se dice que un estad?stico $T=r(X)$ es suficiente para todo $\theta$ si la distribuci?n de $X$ condicional a que $T=t$ es independiente de $\theta$ para todo $t$
+De manera análoga a lo expuesto para $\hat{p}_{m_1}$, podemos ver que $\hat{k}_{m_1}$ es insesgado ya que $E_{\theta}(\hat{k}_{m_1}) = k = q(\theta)$. Similarmente, obtendremos que
+
+$$
+\boxed{ECM_{\theta}(\hat{k}_{m_1})=Var_{\theta}(\hat{k}_{m_1})=\frac{k(1-p)}{np}}
+$$
+
+## Consistencia
+
+Sabemos que por la ley fuerte de los grandes números, 
+
+$$
+\overline{X} = \frac{1}{n}\sum_{i = 1}^{n}{X_i} \rightarrow E(X_1) \quad c.t.p.
+$$
+Luego, 
+
+$$
+\frac{1}{k}\overline{X}  \rightarrow \frac{1}{k}E(X_1) = q(\theta) = p \quad c.t.p.
+$$
+y por lo tanto $\frac{1}{k}\overline{X} = \hat{p}_{m_1} = \hat{p}_{mv}$ es un estimador fuertemente consistente de $q(\theta)=p$.
+
+De manera análoga, pero reemplazando $\frac{1}{k}$ por $\frac{1}{p}$ podemos probar que $\hat{k}_{m_1}$ es fuertemente consistente para $q(\theta)=k$.
+
+## Estadísticos suficientes
+
+Sea $\mathbb{X}$ un vector aleatorio de dimensión $n$ cuya distribución es$F(\textbf{x},\theta)$ con $\theta \in \Theta$
+Se dice que un estad?stico $T=r(X)$ es suficiente para todo $\theta$ si la distribución de $X$ condicional a que $T=t$ es independiente de $\theta$ para todo $t$
 
 Para encontrar el estad?stico suficiente se utilizar? el siguiente teorema
 
-###Teorema de Factorizaci?n
+###Teorema de Factorización
 
 Sea $X$ un vector aleatorio con funci?n de densidad o funci?n de probabilidad puntural $p(x,\theta),\theta \in \Theta$. Entonces, el estad?stico $T=r(X)$ es suficiente para $\theta$si y s?lo si existen dos funciones $g$ y $h$ tales que:
 
@@ -293,18 +276,10 @@ $$
 p(\mathbf{x},\theta)=g(r(\mathbf{x}),\theta) h(\mathbf{x})
 $$
 
-
-
-library(tidyverse)
-library(pryr)
-
-sims <- 1e2
-max_n <- 1e3
-lambda <- 1
-
+# Anexo 1: Código de simulaciones
 
 ```{r maxima_verosimilitud, eval=FALSE}
-library(tidiverse)
+library(tidyverse)
 verosimilitud <- function(X) {
   function(tita) {
       sum(log(dbinom(X, size = tita[["n"]], prob = tita[["p"]])))
