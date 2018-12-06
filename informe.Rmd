@@ -1,6 +1,6 @@
 ---
-title: "Teoría Estadística - Distribución Binomial"
-author: "Gonzalo Barrera Borla y Jesús Zapata"
+title: "Teoria Estadistica - Distribucion Binomial"
+author: "Gonzalo Barrera Borla y Jesus Zapata"
 date: "2 de Septiembre de 2018"
 output:
   html_document:
@@ -8,9 +8,9 @@ output:
     number_sections: yes
     toc: yes
   pdf_document:
-    latex_engine: xelatex
+    latex_engine: pdflatex
 ---
-sdfsdf
+
 # Introducción
 
 Sea $\mathbb{X}=(X_1,X_2,...,X_n)$ un vector aleatorio tal que $X_i \sim Bi(k, p) \ \forall \ i \in \{1,...,n\}$, y $X_i \ \bot \ X_j \ \forall \ i,j \in \{1,...,n\}$. Es decir, que todas las $X_i$ son independientes entre sí, están idénticamente distribuidas, y su función de distribución pertenece a la "familia binomial"
